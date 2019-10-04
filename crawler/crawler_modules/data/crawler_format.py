@@ -81,7 +81,11 @@ def test_mongo():
         # def crawler(name, db) <- 이 모듈 안에 넣는 부분
 
         # open chrom
-        driver = webdriver.Chrome('C://driver/chromedriver')
+        # open chrom
+        doptions = webdriver.ChromeOptions()
+        doptions.add_extension('ublock.crx')
+        doptions.add_extension('blockimage.crx')
+        driver = webdriver.Chrome('C://driver/chromedriver', options=doptions)
 
         # elif name == 'sitename'
         end_crawling(inven.crawler(driver, name, db), name)

@@ -69,38 +69,22 @@ def crawler(driver, name, db):
                         print("no response")
                         break
 
-            #------ save it every 20 count ------#
+                        # ------ save it every 20 count ------#
             if len(boards) > 20:
-                # ------ save data to db ------#
                 # ------ to update last post_num ------#
-                post_nums[i] = post_num
-                # todo : save psotnum for each gallery
-                db.rawdata.update_one({"site": name}, {"$set": {"post_num."+str(i): post_num}})
+                db.rawdata.update_one({"site": name}, {"$set": {"post_num." + str(i): post_num}})
+                # ------ save data to db ------#
                 db.rawdata.update_one({"site": name}, {"$addToSet": {"board": {"$each": boards}}})
-
-                # save data in local for checking data
-                #file_data["board"] += boards
-
-                #init
+                # ------ init ------ #
                 boards = []
 
         # after crawling is done for one gallery
-        #------ save data to db ------#
-        #------ to update last post_num ------#
-        post_nums[i] = post_num
-        # todo : save psotnum for each gallery
+        # ------ to update last post_num ------#
         db.rawdata.update_one({"site": name}, {"$set": {"post_num." + str(i): post_num}})
+        # ------ save data to db ------#
         db.rawdata.update_one({"site": name}, {"$addToSet": {"board": {"$each": boards}}})
-
-        # save data in local for checking data
-        #file_data["board"] += boards
-
-    # after crawling is done for all gallery
-    # to save last post_nums
-    #file_data["post_num"] = post_nums
-
-    #------ to update last post_num ------#
-    db.rawdata.update_one({"site": name}, {"$addToSet": {"post_nums": post_nums}})
+        # ------ init ------ #
+        boards = []
 
     # save data to json
     json_string = json.dumps(file_data, ensure_ascii=False, indent="\t")
