@@ -1,0 +1,12 @@
+{
+	"site": "sitename",
+	"board": [],
+	"post_num": [
+		1234,
+		1234
+	],
+    "gallery_url": [
+        "extraUrl_1/",
+        "extraUrl_2/"
+    ]
+}
