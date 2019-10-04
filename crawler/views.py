@@ -10,7 +10,7 @@ from pymongo import MongoClient
 
 # import crawler modules
 # add( write ) .py name about crawler
-from crawler.crawler_modules import inven, instiz, pann, ou, dcinside
+from crawler.crawler_modules import inven, instiz, pann, ou, dcinside, generation
 
 
 # Create your views here.
@@ -55,6 +55,8 @@ def crawler(name, db):
     elif name == 'pann':
         end_crawling(pann.crawler(driver, name, db), name)
     elif name == 'ou':
+        end_crawling(ou.crawler(driver, name, db), name)
+    elif name == 'generation':
         end_crawling(ou.crawler(driver, name, db), name)
     elif name == 'dcbaseball':
         end_crawling(dcinside.crawler(driver, name, db), name)
