@@ -15,15 +15,29 @@ def end_crawling(json_string, name):
     return f.close()
 
 
-def insert_newSite(db):
+def insert_newSite(db, name):
+
     # 1. Insert empty json model -> first crawling, run this independently
     f = open('data/empty.json', 'r', encoding="utf-8")
     json_str = f.read()
     # print(json_str)
     file_data = json.loads(json_str, encoding="utf-8")
-
+    empty_name = file_data["site"]
     f.close()
-    db.rawdata.insert_one(file_data)
+
+    # ------ check site name && rawdata ------ #
+    try:
+        if empty_name == name:
+            cursor = db.rawdata.find({"site": empty_name})
+            empty_name = cursor[0]["site"]
+            print("already exist")
+            return
+        else:
+            print("check \"sitename\" in empty.json and \"name\" in format.py")
+            exit(-1)
+    except IndexError:
+        print("it's new one, store empty data to db")
+        db.rawdata.insert_one(file_data)
 
 def test_mongo():
 
@@ -36,8 +50,11 @@ def test_mongo():
         # 디비 연결
         db = client.crawler_db
 
+        # todo : change sitename
+        name = "sitename"
+
         # 1. Insert empty json model -> first crawling, run this independently
-        # insert_newSite(db)
+        insert_newSite(db, name)
 
         ###########################################################################
         # 2. Get "site" name list
@@ -69,8 +86,6 @@ def test_mongo():
 
         ###########################################################################
         # 3. Get post_num[], using "site" : name
-        # todo : change sitename
-        name = "inven"
         cursor = db.rawdata.find_one({"site": name}, {"_id": 0, "post_num": 1, "gallery_url": 1})
         # cursor is dict : cursor[]
         print(cursor["post_num"][0])
@@ -107,10 +122,6 @@ def test_mongo():
     except:
         traceback.print_exc()
 
-
-
-# 1. Insert empty json model -> first crawling, run this independently
-#insert_newSite(db)
 
 test_mongo()
 

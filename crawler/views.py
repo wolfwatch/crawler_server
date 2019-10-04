@@ -75,3 +75,5 @@ def end_crawling(json_string, name):
     # HttpResponse(json.dumps(result), content_type='application/json')
 
     return f.close()
+
+
