@@ -13,8 +13,8 @@ def crawler(driver, name, db):
 
     ## 로그인 파트
     driver.get('https://logins.daum.net/accounts/signinform.do?url=https%3A%2F%2Fwww.daum.net%2F')
-    driver.find_element_by_name('id').send_keys('kyi9682')
-    driver.find_element_by_name('pw').send_keys('12qwaszx')
+    driver.find_element_by_name('id').send_keys('******')
+    driver.find_element_by_name('pw').send_keys('********')
     dd = driver.find_element_by_name('pw')
     dd.send_keys(Keys.RETURN)
     sleep(1)
