@@ -1,4 +1,4 @@
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
 import json
 from collections import OrderedDict
 
@@ -42,6 +42,23 @@ def crawler(driver, name, db):
             try:
                 #------ get each gallery ------#
                 driver.get(url + str(post_num))
+                # check for alert (nonexistent article)
+                try:
+                    alert = driver.switch_to.alert
+                    alert.accept()
+                    continue
+                except NoAlertPresentException:
+                    # article exist
+                    pass
+                # check for login popup (unauthorized article)
+                if len(driver.window_handles) > 1:
+                    main_window = driver.current_window_handle
+                    for j in driver.window_handles:
+                        if j != main_window:
+                            driver.switch_to.window(j)
+                            driver.close()
+                    driver.switch_to.window(main_window)
+                    continue
                 driver.switch_to.frame(driver.find_element_by_id('cafe_main'))  # switch to inner frame
 
                 # parsing html part
