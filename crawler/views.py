@@ -57,7 +57,7 @@ def crawler(name, db):
     elif name == 'ou':
         end_crawling(ou.crawler(driver, name, db), name)
     elif name == 'generation':
-        end_crawling(ou.crawler(driver, name, db), name)
+        end_crawling(generation.crawler(driver, name, db), name)
     elif name == 'dcbaseball':
         end_crawling(dcinside.crawler(driver, name, db), name)
     elif name == 'dieselmania':
