@@ -68,7 +68,6 @@ def crawler(driver, name, db):
         extra_cnt = 0
         for addr_url in w:
             extra_cnt += 1
-            print(extra_cnt)
             if(extra_cnt > extra):
                 break
             addr_list.append(addr_url.get_attribute('href'))
