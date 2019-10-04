@@ -42,7 +42,10 @@ def index(request):
 
 def crawler(name, db):
     # open chrom
-    driver = webdriver.Chrome('C://driver/chromedriver')
+    doptions = webdriver.ChromeOptions()
+    doptions.add_extension('ublock.crx')
+    doptions.add_extension('blockimage.crx')
+    driver = webdriver.Chrome('C://driver/chromedriver', options=doptions)
 
     # Each 'site' has a crawler 'module'
     if name == 'inven':
