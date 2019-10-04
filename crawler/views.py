@@ -53,6 +53,8 @@ def crawler(name, db):
         end_crawling(pann.crawler(driver, name, db), name)
     # keep adding more crawler module
 
+    driver.close()
+
 @csrf_exempt
 def result(request):
     data = request.POST
