@@ -58,6 +58,8 @@ def crawler(name, db):
         end_crawling(ou.crawler(driver, name, db), name)
     elif name == 'dcbaseball':
         end_crawling(dcinside.crawler(driver, name, db), name)
+    elif name == 'dieselmania':
+        end_crawling(dcinside.crawler(driver, name, db), name)
     # keep adding more crawler module
 
     driver.close()
