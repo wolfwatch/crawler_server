@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 
 def crawler(driver, name, db):
-    
+
     u = 'http://www.todayhumor.co.kr/board/'
     r1 = 'list'
     r2 = 'view'
