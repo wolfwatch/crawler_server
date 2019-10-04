@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 
 def crawler(driver, name, db):
+    # todo : change url
     url = 'https://www.ilbe.com/list/'
 
     #------ declare ------#
@@ -35,6 +36,9 @@ def crawler(driver, name, db):
             continue
 
         n = (int(max_post_num) - post_nums[i]) / 30
+        extra = (int(max_post_num) - post_nums[i]) % 30
+        print(extra)
+
         post_num = post_nums[i]
         #page 35      2페이지     2페이지만
         #3개씩 목록 번호를 받아오겠다.
@@ -58,6 +62,60 @@ def crawler(driver, name, db):
         addr_list = []
         #새로 갱신된 목록이 많아질 수록 순환 횟수가 늘어난다. 3페이지씩 목록을 가져온다.
 
+        driver.get('http://www.ilbe.com/list/free?page=' + str(try_num+1) + '&listStyle=list')
+        q = driver.find_element_by_class_name('board-body')
+        w = q.find_elements_by_class_name('subject')
+        extra_cnt = 0
+        for addr_url in w:
+            extra_cnt += 1
+            print(extra_cnt)
+            if(extra_cnt > extra):
+                break
+            addr_list.append(addr_url.get_attribute('href'))
+
+        cnt = 0
+        # ------ get each gallery ------#
+        for addr in addr_list:
+            cnt += 1
+            try:
+                # ------ get each gallery ------#
+                driver.get(addr)
+
+                # parsing html part
+                r = driver.find_element_by_class_name('post-header')
+                t = r.find_element_by_tag_name('h3')
+                title = t.get_attribute('innerText')
+                y = driver.find_element_by_class_name('post-count')
+                u = y.find_element_by_class_name('date')
+                date = u.get_attribute('innerText')
+                o = driver.find_element_by_class_name('post-content')
+                content = o.get_attribute('innerText')
+
+                # ------ store data to board[] ------#
+                board = OrderedDict()
+                board['title'] = title
+                board['date'] = date
+                board['url'] = addr
+                board['content'] = content
+                boards.append(board)
+
+                json_string = json.dumps(boards, ensure_ascii=False, indent="\t")
+                print(json_string)
+
+            except NoSuchElementException:
+                continue
+
+            # ------ save it every 15 count ------#
+            if len(boards) > 15:
+                # ------ to update last post_num ------#
+                db.rawdata.update_one({"site": name}, {"$set": {"post_num." + str(i): post_num + cnt}})
+                # ------ save data to db ------#
+                db.rawdata.update_one({"site": name}, {"$addToSet": {"board": {"$each": boards}}})
+                # ------ init ------ #
+                boards = []
+                cnt = 0
+
+        cnt = 0
         while try_num > 0 :
             # 3보다 큰 경우
             if try_num > 3 :
@@ -65,15 +123,15 @@ def crawler(driver, name, db):
                     driver.get('http://www.ilbe.com/list/free?page=' + str(m) + '&listStyle=list')
                     q = driver.find_element_by_class_name('board-body')
                     w = q.find_elements_by_class_name('subject')
-                    for i in w:
-                        addr_list.append(i.get_attribute('href'))
+                    for addr_url in w:
+                        addr_list.append(addr_url.get_attribute('href'))
             elif try_num <= 3 and try_num > 0: # 3보다 작고 0보다는 큰경우
                 for m in range(try_num, 0, -1) :
                     driver.get('http://www.ilbe.com/list/free?page=' + str(m) + '&listStyle=list')
                     q = driver.find_element_by_class_name('board-body')
                     w = q.find_elements_by_class_name('subject')
-                    for i in w:
-                        addr_list.append(i.get_attribute('href'))
+                    for addr_url in w:
+                        addr_list.append(addr_url.get_attribute('href'))
 
             try_num -= 3
             cnt = 0
