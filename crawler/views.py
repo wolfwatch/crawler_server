@@ -56,6 +56,10 @@ def crawler(name, db):
         end_crawling(pann.crawler(driver, name, db), name)
     elif name == 'ou':
         end_crawling(ou.crawler(driver, name, db), name)
+    elif name == 'dotax':
+        end_crawling(ou.crawler(driver, name, db), name)
+    elif name == 'ilbe':
+        end_crawling(ou.crawler(driver, name, db), name)
     # keep adding more crawler module
 
     driver.close()
