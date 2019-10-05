@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'Crwaling_Server.wsgi.application'
 
 DATABASES = {
     'default': {
-           'ENGINE': 'djongo',
-           'NAME': 'crawler_db',
+        'ENGINE': 'djongo',
+        'NAME': 'crawler_db',
+        'HOST': 'wolfwatch.dlinkddns.com',
+        'PORT': 27017,
+        'USER': '{$username}',
+        'PASSWORD': '{$Password}',
        }
 }
 

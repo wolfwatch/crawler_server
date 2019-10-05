@@ -69,7 +69,7 @@ def crawler(driver, name, db):
                         print("no response")
                         break
 
-                        # ------ save it every 20 count ------#
+            # ------ save it every 20 count ------#
             if len(boards) > 20:
                 # ------ to update last post_num ------#
                 db.rawdata.update_one({"site": name}, {"$set": {"post_num." + str(i): post_num}})

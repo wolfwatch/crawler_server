@@ -1,7 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 import json
 from collections import OrderedDict
-from crawler.models import Student, RawData
+
 
 def crawler(driver, name, db):
     # main address of inven

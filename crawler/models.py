@@ -4,7 +4,7 @@ from django.contrib.postgres.fields import ArrayField
 from djongo import models
 from django import forms
 import json
-#from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField
 
 
 # Create your models here.
