@@ -13,7 +13,7 @@ from pymongo import MongoClient
 
 # import crawler modules
 # add( write ) .py name about crawler
-from crawler.crawler_modules import inven, instiz, pann, ou
+from crawler.crawler_modules import inven, instiz, pann, ou, dotax, ilbe
 
 
 # Create your views here.
@@ -75,10 +75,10 @@ def crawler(name, db):
             end_crawling(ou.crawler(driver, name, db), name)
         elif name == 'dotax':
             driver = webdriver.Chrome('C://driver/chromedriver', options=doptions)
-            end_crawling(ou.crawler(driver, name, db), name)
+            end_crawling(dotax.crawler(driver, name, db), name)
         elif name == 'ilbe':
             driver = webdriver.Chrome('C://driver/chromedriver', options=doptions)
-            end_crawling(ou.crawler(driver, name, db), name)
+            end_crawling(ilbe.crawler(driver, name, db), name)
         # keep adding more crawler module
 
     driver.close()
