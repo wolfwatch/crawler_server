@@ -1,5 +1,3 @@
-import datetime
-
 from selenium.common.exceptions import NoSuchElementException
 import json
 from collections import OrderedDict
