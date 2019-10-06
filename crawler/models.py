@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django.contrib.postgres.fields import ArrayField
+
 from djongo import models
 from django import forms
 import json
