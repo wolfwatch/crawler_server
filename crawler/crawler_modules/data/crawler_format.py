@@ -80,7 +80,7 @@ def test_mongo():
 
         # check site lite
         print(list_cursor[0]["site"])  # list_cursor[0] -> dict 객체를 가져옴
-        name = list_cursor[0]["site"]
+        # name = list_cursor[0]["site"]
         for site_name in list_cursor:  # cursor 를 이용해서 해당 객체에 하나씩 접근
             print("site: "+site_name["site"])
 

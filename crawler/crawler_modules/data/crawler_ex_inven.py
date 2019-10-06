@@ -1,4 +1,6 @@
 import datetime
+import time
+from random import randint
 
 from selenium.common.exceptions import NoSuchElementException
 import json
@@ -37,6 +39,9 @@ def crawler(driver, name, db):
 
         post_num = post_nums[i]
         for post_num in range(post_nums[i], int(max_post_num)):
+            # block 방지
+            rand_value = randint(1, 10)
+            time.sleep(rand_value)
             try:
                 #------ get each gallery ------#
                 driver.get(url + gallery_url[i] + str(post_num))
