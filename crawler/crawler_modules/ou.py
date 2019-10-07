@@ -1,3 +1,5 @@
+import datetime
+
 from selenium.common.exceptions import NoSuchElementException
 import json
 from collections import OrderedDict
@@ -53,7 +55,7 @@ def crawler(driver, name, db):
                 #------ store data to board[] ------#
                 board = OrderedDict()
                 board['title'] = title
-                board['date'] = date
+                board['date'] = datetime.datetime.strptime(date[7:], "%Y/%m/%d %H:%M:%S")
                 board['url'] = url + gallery_url[i] +'&no='+ str(post_num)
                 board['content'] = content
                 boards.append(board)
