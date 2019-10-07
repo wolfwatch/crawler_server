@@ -58,7 +58,8 @@ def crawler(driver, name, url, db, word):
 
         # ------ save it every 20 count ------#
         if len(boards) > 20:
-            db.raw_table.insert_many(boards)
+            # store in word_table collection
+            db.word_table.insert_many(boards)
 
     db.raw_table.insert_many(boards)
                 # save data to json
