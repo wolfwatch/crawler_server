@@ -1,6 +1,9 @@
 from selenium.common.exceptions import NoSuchElementException
 import json
 from collections import OrderedDict
+from datetime import datetime
+from time import sleep
+import random
 
 def crawler(driver, name, db):
     # all dc crawler can use same function
@@ -39,6 +42,7 @@ def crawler(driver, name, db):
 
         post_num = post_nums[i]
         for post_num in range(post_nums[i], int(max_post_num)):
+            sleep(random.uniform(1.25, 4))
             try:
                 #------ get each gallery ------#
                 driver.get(url + gallery_url[i] + str(post_num))
@@ -51,13 +55,13 @@ def crawler(driver, name, db):
                 #------ store data to board[] ------#
                 board = OrderedDict()
                 board['title'] = title
-                board['date'] = date
+                board['date'] = datetime.strptime(date, '%Y.%m.%d %H:%M:%S')
                 board['url'] = url + gallery_url[i] + str(post_num)
                 board['content'] = content
                 boards.append(board)
 
-                json_string = json.dumps(boards, ensure_ascii=False, indent="\t")
-                print(json_string)
+                #json_string = json.dumps(boards, ensure_ascii=False, indent="\t")
+                #print(json_string)
 
             except NoSuchElementException:
                 '''
@@ -110,6 +114,7 @@ def crawler(driver, name, db):
     #db.rawdata.update_one({"site": name}, {"$addToSet": {"post_nums": post_nums}})
 
     # save data to json
-    json_string = json.dumps(file_data, ensure_ascii=False, indent="\t")
+    #json_string = json.dumps(file_data, ensure_ascii=False, indent="\t")
+    json_string = ''
 
     return json_string

@@ -1,3 +1,5 @@
+import datetime
+
 from selenium.common.exceptions import NoSuchElementException
 import json
 from collections import OrderedDict
@@ -86,7 +88,8 @@ def crawler(driver, name, db):
                 title = t.get_attribute('innerText')
                 y = driver.find_element_by_class_name('post-count')
                 u = y.find_element_by_class_name('date')
-                date = u.get_attribute('innerText')
+                date = datetime.datetime.strptime(u.get_attribute('innerText'), "%Y-%m-%d %H:%M:%S")
+
                 o = driver.find_element_by_class_name('post-content')
                 content = o.get_attribute('innerText')
 
@@ -97,7 +100,6 @@ def crawler(driver, name, db):
                 board['url'] = addr
                 board['content'] = content
                 boards.append(board)
-
                 json_string = json.dumps(boards, ensure_ascii=False, indent="\t")
                 print(json_string)
 

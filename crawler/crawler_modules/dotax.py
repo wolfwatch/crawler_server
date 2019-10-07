@@ -1,3 +1,5 @@
+import datetime
+
 from selenium.common.exceptions import NoSuchElementException
 import json
 from collections import OrderedDict
@@ -60,7 +62,8 @@ def crawler(driver, name, db):
                 driver.switch_to.frame(driver.find_element_by_id('down'))
                 # parsing html part
                 title = driver.find_element_by_xpath('//*[@class="subject"]/span[2]').text
-                date = driver.find_element_by_xpath('//*[@class="article_writer"]/span[6]').text
+                u = driver.find_element_by_xpath('//*[@class="article_writer"]/span[6]').text
+                date = datetime.datetime.strptime(u, "%Y.%m.%d. %H:%M")
                 content = driver.find_element_by_class_name('protectTable').get_attribute('innerText')
 
                 #------ store data to board[] ------#
