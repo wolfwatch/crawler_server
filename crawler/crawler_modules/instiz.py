@@ -42,12 +42,22 @@ def crawler(driver, name, db):
     # for : 첫번째 겔러리 ~ n번째 갤러리
     for i in range(0, len(gallery_url)):
 
-        # find latest post_number of post, to set max number
-        driver.get(url + gallery_url[i])
-
-        max_post = driver.find_element_by_xpath('//td[@class="listno regdate"]')
-        max_post_num = max_post.get_attribute('no')
-        print(int(max_post_num))
+        try:
+            # find latest post_number of post, to set max number
+            driver.get(url + gallery_url[i])
+            max_post = driver.find_element_by_xpath('//td[@class="listno regdate"]')
+            max_post_num = max_post.get_attribute('no')
+            print("instiz max num : " + max_post_num)
+        except NoSuchElementException:
+            try:
+                # find latest post_number of post, to set max number
+                driver.get(url + gallery_url[i])
+                max_post = driver.find_element_by_xpath('//td[@class="listno regdate"]')
+                max_post_num = max_post.get_attribute('no')
+                print(int(max_post_num))
+            except:
+                print("instiz "+gallery_url[i]+" max num : " + max_post_num)
+                continue
 
         # check latest
         if post_nums[i] >= int(max_post_num) - 1:
@@ -70,22 +80,40 @@ def crawler(driver, name, db):
                     date = date_1
                 else:
                     date = date_2
+                content = ''
+                try :
+                    content = driver.find_element_by_xpath('//p[@*]').text
+                    print("instiz : " + content)
+                except NoSuchElementException:
+                    print("not this version")
 
-                content = driver.find_element_by_xpath('//p[@*]').text
+                try:
+                    ad = '좋은 글은 공유해서 같이 봐요!'
+                    temp = driver.find_element_by_xpath('//div[@id="memo_content_1"]').text
+                    content += temp.replace(ad, '').replace(content, '')
+                    # print("old_instiz : " + content)
+                except NoSuchElementException:
+                    print("no old version")
+
+                # content += temp.find_element_by_xpath('//p[@*]').text
+                # print("old_instiz_2 : " + content)
 
             except NoSuchElementException:
                 try:
-                    content = driver.find_element_by_xpath('//*[@class="memo_content"]').text
-                    print(content)
+                    content = driver.find_element_by_xpath('//div[@style="text-align: center;"]').text
+                    print("instiz : " + content)
                 except NoSuchElementException:
                     try:
                         # check is_board
                         driver.find_element_by_xpath('//*[@class="topalert"]')
                         print("no post")
+                        continue
                     except NoSuchElementException:
                         try:
-                            # check is_board
-                            driver.find_element_by_xpath('//*[@class="memo_content"]')
+                            # check kids_block
+                            driver.find_element_by_xpath('//*[@class="tb_err_con"]')
+                            print("kids_block post")
+                            continue
                         except NoSuchElementException:
                             print("no response")
                             break
