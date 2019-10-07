@@ -2,6 +2,8 @@ from selenium.common.exceptions import NoSuchElementException
 import json
 from collections import OrderedDict
 from datetime import datetime
+from time import sleep
+import random
 
 def crawler(driver, name, db):
     # all dc crawler can use same function
@@ -40,6 +42,7 @@ def crawler(driver, name, db):
 
         post_num = post_nums[i]
         for post_num in range(post_nums[i], int(max_post_num)):
+            sleep(random.uniform(1.25, 4))
             try:
                 #------ get each gallery ------#
                 driver.get(url + gallery_url[i] + str(post_num))

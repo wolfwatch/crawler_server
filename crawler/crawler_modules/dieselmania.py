@@ -2,6 +2,8 @@ from selenium.common.exceptions import NoSuchElementException, NoAlertPresentExc
 import json
 from collections import OrderedDict
 from datetime import datetime
+from time import sleep
+import random
 
 def crawler(driver, name, db):
     url = 'https://cafe.naver.com/dieselmania?iframe_url=/ArticleRead.nhn%3Fclubid=11262350%26menuid=91%26boardtype=L%26articleid='
@@ -40,6 +42,7 @@ def crawler(driver, name, db):
 
         post_num = post_nums[i]
         for post_num in range(post_nums[i], int(max_post_num)):
+            sleep(random.uniform(1, 3))
             try:
                 #------ get each gallery ------#
                 driver.get(url + str(post_num))
