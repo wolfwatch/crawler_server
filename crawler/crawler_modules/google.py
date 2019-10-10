@@ -56,15 +56,15 @@ def crawler(driver, meta, db, word):
 
             if len(boards) > 20:
                 # FIXME update last_date to (target_date + timedelta(days=1)).strftime('%m/%d/%Y')
-                db.raw_table.update_many(boards, upsert=True)
+                db.word_table.update_many(boards, upsert=True)
                 boards.clear()
 
             target_date = target_date + timedelta(days=1)
 
             if target_date > datetime.now():
                 if len(boards) > 0:
-                    db.raw_table.update_many(boards, upsert=True)
+                    db.word_table.update_many(boards, upsert=True)
                 return
     except KeyboardInterrupt:  # Ctrl-C
         # FIXME update last_date to (target_date + timedelta(days=1)).strftime('%m/%d/%Y')
-        db.raw_table.update_many(boards, upsert=True)
+        db.word_table.update_many(boards, upsert=True)
