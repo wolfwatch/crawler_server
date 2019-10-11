@@ -66,7 +66,7 @@ def crawler(driver, name, db):
                 driver.switch_to.frame(driver.find_element_by_id('cafe_main'))  # switch to inner frame
 
                 # parsing html part
-                title_box = driver.find_element_by_id('tit-box')
+                title_box = driver.find_element_by_class_name('tit-box')
                 title = title_box.find_element_by_class_name('fl').find_element_by_tag_name('tr').find_elements_by_tag_name('td')[0].get_attribute('innerText')
                 date = title_box.find_element_by_class_name('fr').get_attribute('innerText')
                 content = driver.find_element_by_class_name('inbox').find_element_by_id('tbody').get_attribute('innerText')
