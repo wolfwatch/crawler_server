@@ -28,6 +28,7 @@ def insert_newSite(db, name):
     # ------ check site name && rawdata ------ #
     try:
         if empty_name == name:
+
             cursor = db.rawdata.find({"site": empty_name})
             empty_name = cursor[0]["site"]
             print("already exist")
