@@ -1,3 +1,5 @@
+from urllib.parse import quote_plus
+
 from selenium.common.exceptions import NoSuchElementException
 import json
 from collections import OrderedDict
@@ -7,6 +9,7 @@ import random
 from selenium import webdriver
 from datetime import datetime, timedelta
 
+from pymongo import MongoClient
 
 def crawler(driver, meta, db, word):
 
@@ -15,8 +18,9 @@ def crawler(driver, meta, db, word):
 
     name = meta['site']
     cafe_url = meta['url'].lstrip('https://cafe.naver.com/') #https://cafe.naver.com/dieselmania 이런 주소가 있다면 dieselmania 이 부분만 들어가야함
-    last_date = datetime.strptime(meta['last_date'], '%Y.%m.%d')
-
+    print(cafe_url)
+    last_date = meta['last_date']
+    #last_date = datetime.strptime(meta['last_date'], '%Y.%m.%d') #문자열로 날짜 시간 객체 만들기
     driver.implicitly_wait(1)
 
     base_url = 'https://search.naver.com/search.naver?where=article&query=[q]&ie=utf8&st=rel&date_option=6&date_from=[date]&date_to=[date]&board=&srchby=text&dup_remove=1&cafe_url=[cafeurl]'
@@ -47,10 +51,18 @@ def crawler(driver, meta, db, word):
             board['date'] = target_date
             board['count'] = result_count
             boards.append(board)
+
+            print(len(boards))
+            print("word ", board['word'])
+            print("site ", board['site'])
+            print("date ", board['date'])
+            print("count ", board['count'])
+
             #현재 result table만 업데이 되는 것
             if len(boards) > 20:
                 # FIXME update last_date to (target_date + timedelta(days=1)).strftime('%Y.%m.%d')
                 db.result_table.update_many(boards, upsert=True)
+                print("넣습니다!")
                 boards.clear()
 
             target_date = target_date + timedelta(days=1)
@@ -60,9 +72,31 @@ def crawler(driver, meta, db, word):
             #종료하기 전에 남아있는 데이터 저장
             if target_date > datetime.now():
                 if len(boards) > 0:
-                    db.word_table.update_many(boards, upsert=True)
+                    print("마지막으로 넣습니다!")
+                    db.result_table.update_many(boards, upsert=True)
                 return
     except KeyboardInterrupt: #ctrl_C로 종료할 때 남아있는 데이터 저장
         # FIXME update last_date to (target_date + timedelta(days=1)).strftime('%Y.%m.%d')
         if len(boards) > 0:
-            db.word_table.update_many(boards, upsert=True)
+            db.result_table.update_many(boards, upsert=True)
+
+
+
+uri = "mongodb://%s:%s@%s" % (quote_plus("admin123"), quote_plus("1234"), "wolfwatch.dlinkddns.com:27017/admin")
+client = MongoClient(uri)
+# 디비 연결
+DB = client.crawler_db
+
+# open chrom
+doptions = webdriver.ChromeOptions()
+doptions.add_extension('ublock.crx')
+doptions.add_extension('blockimage.crx')
+
+dr = webdriver.Chrome('C://driver/chromedriver', options=doptions)
+
+me = OrderedDict()
+me["site"] = "디젤매니아"
+me["url"] = "https://cafe.naver.com/dieselmania"
+me["last_date"] = datetime.strptime('2018-05-19', '%Y-%m-%d')
+
+crawler(dr, me, DB, "술")
