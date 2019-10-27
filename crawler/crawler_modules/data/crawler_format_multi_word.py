@@ -40,7 +40,7 @@ def check_new_word(db, name):
 
         # set init['last_info'], using data about site list from site table
         g_list_cursor = db.gsite_table.find({}, {"_id":0, "site": 1})
-        set_last_info(g_list_cursor, init['last_info'], "google")
+        # set_last_info(g_list_cursor, init['last_info'], "google")
 
         naver_cursor = db.naver_site_table.find({}, {"_id": 0, "site": 1})
         set_last_info(naver_cursor, init['last_info'], "naver")
