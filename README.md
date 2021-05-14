@@ -18,6 +18,7 @@ If you only match the interface, you can easily import your crawler module by ad
 In order to minimize the communication bottleneck, we request update query to DB for each of 20 arrays.
 
 db.rawdata.update_one({"site": name}, {"$set": {"post_num." + str(i): post_num}})
+
 db.rawdata.update_one({"site": name}, {"$addToSet": {"board": {"$each": boards}}})
 
 
